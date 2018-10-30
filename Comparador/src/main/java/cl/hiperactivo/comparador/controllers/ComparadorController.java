@@ -83,7 +83,6 @@ public class ComparadorController {
         
         if(comparar){
             try {
-                
                 ArrayList<String> lines = (ArrayList)FileUtils.readLines(primero, Charset.defaultCharset());
                 //System.out.println(lines);
 
@@ -102,6 +101,8 @@ public class ComparadorController {
                     }
 		}
                 */
+                //https://stackoverflow.com/questions/31426187/want-to-find-content-difference-between-two-text-files-with-java
+
                 //Diferencias extras
                 ArrayList<String> tmpLines1 = new ArrayList<String>(lines);
                 tmpLines1.removeAll(lines2);

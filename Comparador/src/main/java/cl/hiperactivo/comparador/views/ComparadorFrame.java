@@ -303,7 +303,6 @@ public class ComparadorFrame extends javax.swing.JFrame implements ComparadorCon
 
         //Repintar ¿por?
         textoDosTextArea.getHighlighter().paint(this.getGraphics());
-
     }
 
     @Override
