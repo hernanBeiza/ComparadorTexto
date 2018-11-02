@@ -9,7 +9,10 @@ import cl.hiperactivo.comparador.controllers.ArchivoController;
 import cl.hiperactivo.comparador.controllers.ComparadorController;
 import cl.hiperactivo.comparador.models.Linea;
 import java.awt.Color;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -37,7 +40,11 @@ public class ComparadorFrame extends javax.swing.JFrame implements ComparadorCon
      */
     public ComparadorFrame() {
         initComponents();
-        //this.prueba();
+        //Ícono de la aplicación
+        URL url = ClassLoader.getSystemResource("paper.png");
+        Toolkit kit = Toolkit.getDefaultToolkit();
+        Image img = kit.createImage(url);
+        this.setIconImage(img);
     }
 
     @Override
@@ -48,20 +55,6 @@ public class ComparadorFrame extends javax.swing.JFrame implements ComparadorCon
         this.setLocationRelativeTo(null);
     }
     
-    
-    
-    public void prueba(){
-        textoUnoTextArea.setText("Primera línea con harto texto porque hay que probar");
-        try {
-            //textoUnoTextArea.getHighlighter().addHighlight(0, 3, DefaultHighlighter.DefaultPainter);
-            textoUnoTextArea.getHighlighter().addHighlight(0, 29, cyanPainter);
-            textoUnoTextArea.getHighlighter().addHighlight(35, 38, redPainter);
-        } catch (BadLocationException ble) {
-            System.out.println(ble.getLocalizedMessage());            
-        }
-        
-    }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -77,19 +70,29 @@ public class ComparadorFrame extends javax.swing.JFrame implements ComparadorCon
         jScrollPane1 = new javax.swing.JScrollPane();
         textoUnoTextArea = new javax.swing.JTextArea();
         rutaUnoTextField = new javax.swing.JTextField();
+        hashUnoTextfield = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         archivoDosButton = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         textoDosTextArea = new javax.swing.JTextArea();
         rutaDosTextField = new javax.swing.JTextField();
+        hashDosTextfield = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Comparador");
+        setMinimumSize(new java.awt.Dimension(660, 400));
+        setPreferredSize(new java.awt.Dimension(660, 400));
 
         jSplitPane1.setDividerLocation(300);
         jSplitPane1.setLastDividerLocation(300);
         jSplitPane1.setMinimumSize(new java.awt.Dimension(600, 100));
         jSplitPane1.setPreferredSize(new java.awt.Dimension(600, 276));
 
+        archivoUnoButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/folder32.png"))); // NOI18N
         archivoUnoButton.setText("Seleccionar  archivo 1");
         archivoUnoButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -104,6 +107,12 @@ public class ComparadorFrame extends javax.swing.JFrame implements ComparadorCon
 
         rutaUnoTextField.setEditable(false);
 
+        hashUnoTextfield.setEditable(false);
+
+        jLabel3.setText("Nombre:");
+
+        jLabel2.setText("Hash");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -113,18 +122,31 @@ public class ComparadorFrame extends javax.swing.JFrame implements ComparadorCon
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(archivoUnoButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
-                    .addComponent(rutaUnoTextField))
+                    .addComponent(hashUnoTextfield)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(rutaUnoTextField))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(archivoUnoButton, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(archivoUnoButton, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(12, 12, 12)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(rutaUnoTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
-                .addComponent(rutaUnoTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(hashUnoTextfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -132,6 +154,7 @@ public class ComparadorFrame extends javax.swing.JFrame implements ComparadorCon
 
         jPanel4.setPreferredSize(new java.awt.Dimension(300, 276));
 
+        archivoDosButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/folder32.png"))); // NOI18N
         archivoDosButton.setText("Seleccionar archivo 2");
         archivoDosButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -146,6 +169,12 @@ public class ComparadorFrame extends javax.swing.JFrame implements ComparadorCon
 
         rutaDosTextField.setEditable(false);
 
+        hashDosTextfield.setEditable(false);
+
+        jLabel5.setText("Nombre:");
+
+        jLabel1.setText("Hash");
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -153,20 +182,33 @@ public class ComparadorFrame extends javax.swing.JFrame implements ComparadorCon
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(archivoDosButton, javax.swing.GroupLayout.DEFAULT_SIZE, 302, Short.MAX_VALUE)
+                    .addComponent(archivoDosButton, javax.swing.GroupLayout.DEFAULT_SIZE, 311, Short.MAX_VALUE)
                     .addComponent(jScrollPane2)
-                    .addComponent(rutaDosTextField))
+                    .addComponent(hashDosTextfield)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(rutaDosTextField)))
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(archivoDosButton)
+                .addComponent(archivoDosButton, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(12, 12, 12)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(rutaDosTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
-                .addComponent(rutaDosTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(hashDosTextfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -178,15 +220,14 @@ public class ComparadorFrame extends javax.swing.JFrame implements ComparadorCon
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 627, Short.MAX_VALUE)
+                .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 636, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 295, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE))
         );
 
         pack();
@@ -203,8 +244,9 @@ public class ComparadorFrame extends javax.swing.JFrame implements ComparadorCon
                 this.archivoUno = fileChooser.getSelectedFile();
                 rutaUnoTextField.setText(fileChooser.getSelectedFile().getName());
                 comparadorController.compararIgualdadLineaALinea(archivoUno,archivoDos);
-                textoUnoTextArea.setText(ArchivoController.abrirArchivo(archivoUno));
 
+                textoUnoTextArea.setText(ArchivoController.abrirArchivo(archivoUno));
+                this.hashUnoTextfield.setText(ArchivoController.obtenerHashDeArchivo(archivoUno));
                 break;
             case JFileChooser.CANCEL_OPTION:
                 System.out.println("Cancelar");
@@ -227,8 +269,10 @@ public class ComparadorFrame extends javax.swing.JFrame implements ComparadorCon
                 this.archivoDos = fileChooser.getSelectedFile();
                 rutaDosTextField.setText(fileChooser.getSelectedFile().getName());
                 comparadorController.compararIgualdadLineaALinea(archivoUno,archivoDos);
-        
+                
                 textoDosTextArea.setText(ArchivoController.abrirArchivo(archivoDos));
+                hashDosTextfield.setText(ArchivoController.obtenerHashDeArchivo(archivoDos));
+
                 break;
             case JFileChooser.CANCEL_OPTION:
                 System.out.println("Cancelar");
@@ -277,6 +321,12 @@ public class ComparadorFrame extends javax.swing.JFrame implements ComparadorCon
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton archivoDosButton;
     private javax.swing.JButton archivoUnoButton;
+    private javax.swing.JTextField hashDosTextfield;
+    private javax.swing.JTextField hashUnoTextfield;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
@@ -322,9 +372,6 @@ public class ComparadorFrame extends javax.swing.JFrame implements ComparadorCon
     @Override
     public void onComparadorDeContenidoError(String error) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-    
-    
+    }    
     
 }

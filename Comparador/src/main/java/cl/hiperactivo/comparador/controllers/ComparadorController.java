@@ -25,8 +25,7 @@ public class ComparadorController {
         void onComparadorPorLineaNoEncontradas();
         
         void onComparadorDeContenidoExito(String mensaje);
-        void onComparadorDeContenidoError(String error);
-
+        void onComparadorDeContenidoError(String error);        
     }
 
     public ComparadorDelegate getDelegate() {
@@ -36,7 +35,11 @@ public class ComparadorController {
     public void setDelegate(ComparadorDelegate delegate) {
         this.delegate = delegate;
     }
-    
+    /**
+     * Compara si dos archivos son iguales o no a través de la librería FileUtils
+     * @param primero File Primer archivo
+     * @param segundo File Segundo archivo
+     */
     public void compararIgualdadDeContenido(File primero, File segundo){
         boolean comparar = true;
         String errores = "Faltó:";
@@ -65,8 +68,8 @@ public class ComparadorController {
     }
     /**
      * Compara dos archivos línea a línea
-     * @param primero File
-     * @param segundo File
+     * @param primero File Primer archivo
+     * @param segundo File Segundo archivo
      */
     public void compararIgualdadLineaALinea(File primero, File segundo){
         boolean comparar = true;
@@ -141,6 +144,5 @@ public class ComparadorController {
             System.out.println(errores);
         }
     }
-    
 
 }
