@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import javax.swing.SwingUtilities;
 import org.apache.commons.io.FileUtils;
 /**
  *
@@ -23,6 +24,8 @@ public class ComparadorController {
     public interface ComparadorDelegate {        
         void onComparadorPorLineaEncontradas(ArrayList<Linea> lineas);
         void onComparadorPorLineaNoEncontradas();
+
+        void onComparadorHash(boolean sonIguales);
         
         void onComparadorDeContenidoExito(String mensaje);
         void onComparadorDeContenidoError(String error);        
@@ -85,63 +88,85 @@ public class ComparadorController {
         }
         
         if(comparar){
-            try {
-                ArrayList<String> lines = (ArrayList)FileUtils.readLines(primero, Charset.defaultCharset());
-                //System.out.println(lines);
+            // https://stackabuse.com/how-to-use-threads-in-java-swing/
+            // Runs outside of the Swing UI thread
+            new Thread(new Runnable() {
+                public void run() {
 
-                ArrayList<String> lines2 = (ArrayList)FileUtils.readLines(segundo, Charset.defaultCharset());
-                //System.out.println(lines2);
-                
-                //TODO obtener el archivo más largo, y hacer la comparación según el archivo que sea más largo
-                /*
-                for (int i = 0; i < lines.size(); i++) {
-                    String linea = lines.get(i);
-                    String linea2 = lines2.get(i);
-                    if(linea.equals(linea2)){
-                        System.out.println("Linea "+ i + " de archivo " + primero.getName() + " ES IGUAL a la linea " + i + " de archivo " + segundo.getName());
-                    } else {
-                        System.out.println("Linea "+ i + " de archivo " + primero.getName() + " NO ES IGUAL a la linea " + i + " de archivo " + segundo.getName());
+                    try {
+                        ArrayList<String> lines = (ArrayList)FileUtils.readLines(primero, Charset.defaultCharset());
+                        //System.out.println(lines);
+                        ArrayList<String> lines2 = (ArrayList)FileUtils.readLines(segundo, Charset.defaultCharset());
+                        //System.out.println(lines2);
+                        //TODO obtener el archivo más largo, y hacer la comparación según el archivo que sea más largo
+                        /*
+                        for (int i = 0; i < lines.size(); i++) {
+                            String linea = lines.get(i);
+                            String linea2 = lines2.get(i);
+                            if(linea.equals(linea2)){
+                                System.out.println("Linea "+ i + " de archivo " + primero.getName() + " ES IGUAL a la linea " + i + " de archivo " + segundo.getName());
+                            } else {
+                                System.out.println("Linea "+ i + " de archivo " + primero.getName() + " NO ES IGUAL a la linea " + i + " de archivo " + segundo.getName());
+                            }
+                        }
+                        */
+                        //https://stackoverflow.com/questions/31426187/want-to-find-content-difference-between-two-text-files-with-java
+
+                        //Diferencias extras
+                        ArrayList<String> tmpLines1 = new ArrayList<String>(lines);
+                        tmpLines1.removeAll(lines2);
+                        System.out.println("Contenido de " + primero.getName() + " que no está en " + segundo.getName());
+                        System.out.println(tmpLines1);
+
+                        ArrayList<String> tmpLines2 = new ArrayList<String>(lines2);
+                        tmpLines2.removeAll(lines);
+                        System.out.println("Contenido de " + segundo.getName() + " que no está en " + primero.getName());
+                        System.out.println(tmpLines2);
+
+                        String unoCompleto = FileUtils.readFileToString(primero, Charset.defaultCharset());
+                        String dosCompleto = FileUtils.readFileToString(segundo, Charset.defaultCharset());
+
+                        ArrayList<Linea> encontradas = new ArrayList<Linea>();
+                        for(String linea:tmpLines2){
+                            System.out.println(linea);
+                            int inicio = dosCompleto.indexOf(linea);
+                            int fin = inicio+linea.length();//dosCompleto.lastIndexOf(linea);
+                            System.out.println("inicio " + inicio);
+                            System.out.println("fin " + fin);                        
+                            Linea model = new Linea(new Integer(inicio),new Integer(fin));
+                            encontradas.add(model);
+                        }
+                        
+                        // Runs inside of the Swing UI thread
+                        // Volver al hilo de la UI
+                        SwingUtilities.invokeLater(new Runnable() {
+                            public void run() {
+                                if(encontradas.size()>0){
+                                    delegate.onComparadorPorLineaEncontradas(encontradas);                
+                                } else {
+                                    delegate.onComparadorPorLineaNoEncontradas();
+                                }
+                            }
+                        });
+                        
+                    } catch (IOException ex) {
+                        System.out.println(ex.getLocalizedMessage());
+                        //delegate.onComparadorPorLineaError("Error al obtener las líneas por archivo");
                     }
-		}
-                */
-                //https://stackoverflow.com/questions/31426187/want-to-find-content-difference-between-two-text-files-with-java
 
-                //Diferencias extras
-                ArrayList<String> tmpLines1 = new ArrayList<String>(lines);
-                tmpLines1.removeAll(lines2);
-                System.out.println("Contenido de " + primero.getName() + " que no está en " + segundo.getName());
-                System.out.println(tmpLines1);
-                
-                ArrayList<String> tmpLines2 = new ArrayList<String>(lines2);
-                tmpLines2.removeAll(lines);
-                System.out.println("Contenido de " + segundo.getName() + " que no está en " + primero.getName());
-                System.out.println(tmpLines2);
-                                               
-                String unoCompleto = FileUtils.readFileToString(primero, Charset.defaultCharset());
-                String dosCompleto = FileUtils.readFileToString(segundo, Charset.defaultCharset());
-                
-                ArrayList<Linea> encontradas = new ArrayList<Linea>();
-                for(String linea:tmpLines2){
-                    System.out.println(linea);
-                    int inicio = dosCompleto.indexOf(linea);
-                    int fin = inicio+linea.length();//dosCompleto.lastIndexOf(linea);
-                    System.out.println("inicio " + inicio);
-                    System.out.println("fin " + fin);                        
-                    Linea model = new Linea(new Integer(inicio),new Integer(fin));
-                    encontradas.add(model);
                 }
-                if(encontradas.size()>0){
-                    delegate.onComparadorPorLineaEncontradas(encontradas);                
-                } else {
-                    delegate.onComparadorPorLineaNoEncontradas();
-                }
-                
-            } catch (IOException ex) {
-                System.out.println(ex.getLocalizedMessage());
-                //delegate.onComparadorPorLineaError("Error al obtener las líneas por archivo");
-            }
+            }).start();
+
         } else {
             System.out.println(errores);
+        }
+    }
+    
+    public void compararHash(String uno, String dos){
+        if(uno.equals(dos)){
+            delegate.onComparadorHash(true);
+        } else {
+            delegate.onComparadorHash(false);
         }
     }
 

@@ -10,3 +10,8 @@ Se comparan dos archivos de texto línea a línea
 ## Models
 ### Linea
 - Pojo para transportar el inicio y fin de una línea
+
+## Herramientas
+- Netbeans
+- Java 8
+- MVN

@@ -10,6 +10,7 @@ import cl.hiperactivo.comparador.controllers.ComparadorController;
 import cl.hiperactivo.comparador.models.Linea;
 import java.awt.Color;
 import java.awt.Image;
+import java.awt.SystemColor;
 import java.awt.Toolkit;
 import java.io.File;
 import java.net.URL;
@@ -45,6 +46,8 @@ public class ComparadorFrame extends javax.swing.JFrame implements ComparadorCon
         Toolkit kit = Toolkit.getDefaultToolkit();
         Image img = kit.createImage(url);
         this.setIconImage(img);
+        this.textoUnoTextArea.setEditable(false);
+        this.textoDosTextArea.setEditable(false);
     }
 
     @Override
@@ -269,10 +272,15 @@ public class ComparadorFrame extends javax.swing.JFrame implements ComparadorCon
                 this.archivoDos = fileChooser.getSelectedFile();
                 rutaDosTextField.setText(fileChooser.getSelectedFile().getName());
                 comparadorController.compararIgualdadLineaALinea(archivoUno,archivoDos);
-                
+    
                 textoDosTextArea.setText(ArchivoController.abrirArchivo(archivoDos));
-                hashDosTextfield.setText(ArchivoController.obtenerHashDeArchivo(archivoDos));
+    
+                this.hashUnoTextfield.setBackground(SystemColor.text);
+                this.hashDosTextfield.setBackground(SystemColor.text);
 
+                hashDosTextfield.setText(ArchivoController.obtenerHashDeArchivo(archivoDos));
+                comparadorController.compararHash(this.hashUnoTextfield.getText(), this.hashDosTextfield.getText());
+        
                 break;
             case JFileChooser.CANCEL_OPTION:
                 System.out.println("Cancelar");
@@ -341,27 +349,47 @@ public class ComparadorFrame extends javax.swing.JFrame implements ComparadorCon
     @Override
     public void onComparadorPorLineaEncontradas(ArrayList<Linea> encontradas) {
         System.out.println("onComparadorPorLineaEncontradas");
+
+        this.limpiar();
         
         try {
-            System.out.println(encontradas);
+            //System.out.println(encontradas);
             for(Linea linea:encontradas){
-                textoDosTextArea.getHighlighter().addHighlight(linea.getInicio(), linea.getFin(), redPainter);
+                //System.out.println(linea.getInicio());
+                //System.out.println(linea.getFin());
+                this.textoDosTextArea.getHighlighter().addHighlight(linea.getInicio(), linea.getFin(), redPainter);
             }
         } catch (BadLocationException ble) {
             System.out.println(ble.getLocalizedMessage());
         }        
-
         //Repintar ¿por?
-        textoDosTextArea.getHighlighter().paint(this.getGraphics());
+        //textoDosTextArea.getHighlighter().paint(this.getGraphics());
+
     }
 
     @Override
+    public void onComparadorHash(boolean sonIguales) {
+        if(sonIguales) {
+            this.hashUnoTextfield.setBackground(Color.green);
+            this.hashDosTextfield.setBackground(Color.green);
+        } else {
+            this.hashUnoTextfield.setBackground(Color.red);
+            this.hashDosTextfield.setBackground(Color.red);
+        }
+    }
+
+    
+    @Override
     public void onComparadorPorLineaNoEncontradas() {
         System.out.println("onComparadorPorLineaNoEncontradas");
+        this.limpiar();
+    }
+    
+    private void limpiar(){
         
-        textoUnoTextArea.getHighlighter().removeAllHighlights();
-        textoDosTextArea.getHighlighter().removeAllHighlights();
-
+        this.textoUnoTextArea.getHighlighter().removeAllHighlights();
+        this.textoDosTextArea.getHighlighter().removeAllHighlights();
+        
     }
 
     @Override
