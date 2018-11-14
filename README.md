@@ -12,10 +12,11 @@ Se comparan dos archivos de texto línea a línea
 - Pojo para transportar el inicio y fin de una línea
 
 ## Diagrama de Secuencia
-![](Docs/Comparador - Comparar.jpg) 
+![](Docs/Comparar.jpg) 
 
-## Diagrama de proceso
-![](Docs/ComparadorTexto - Flujo.jpg) 
+
+## Diagrama de Proceso
+![](Docs/Flujo.jpg) 
 
 ## Herramientas
 - Netbeans
